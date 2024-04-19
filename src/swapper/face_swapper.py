@@ -17,7 +17,7 @@ app.add_middleware(CORSMiddleware,
                    allow_headers=["*"],)  # Allows all headers
 
 ROOTDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-WATERMARK = '@MaskOfManyFaces_bot'
+WATERMARK = '@mask_of_many_faces_bot'
 
 
 async def get_n_name(name: str, n: int) -> str:
