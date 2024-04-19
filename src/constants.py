@@ -10,4 +10,5 @@ API = CONFIG['gen_api']
 FOLDER = CONFIG['gen_folder']
 URL = CONFIG['gen_url']
 GEN_MODEL = CONFIG['gen_model']
-FACE_SWAP = CONFIG['swapper']
+
+FASTAPI_BASE_URL = CONFIG['swapper']
