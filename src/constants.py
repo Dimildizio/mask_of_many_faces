@@ -1,4 +1,4 @@
-from utils import get_yaml
+from src.utils import get_yaml
 
 
 CONFIG = get_yaml()
@@ -13,8 +13,12 @@ GEN_MODEL = CONFIG['gen_model']
 
 FASTAPI_BASE_URL = CONFIG['swapper']
 
+DATABASE_FILE = CONFIG['db_name']
+ASYNC_DB_URL = f'{CONFIG["db_type"]}:///{DATABASE_FILE}'
+
 TOKEN = CONFIG['tg_token']
 FACE_DIR = CONFIG['face_folder']
 
 SENT_TIME = {}
 DELAY_BETWEEN_IMAGES = 2
+
