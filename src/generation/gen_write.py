@@ -6,7 +6,7 @@ import random
 
 from typing import Dict
 
-from constants import FOLDER
+from constants import GEN_FOLDER
 
 
 def gen_filename(filetype: str = 'gen', ext: str = 'png') -> str:
@@ -18,7 +18,7 @@ def gen_filename(filetype: str = 'gen', ext: str = 'png') -> str:
     :return: The absolute path to the generated filename.
     """
     while True:
-        filename = os.path.join(FOLDER, f'{filetype}_{random.randint(100, 999999)}.{ext}')
+        filename = os.path.join(GEN_FOLDER, f'{filetype}_{random.randint(100, 999999)}.{ext}')
         if not os.path.exists(filename):
             return os.path.join(os.getcwd(), filename)
 
