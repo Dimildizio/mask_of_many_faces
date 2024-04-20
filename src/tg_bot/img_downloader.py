@@ -4,7 +4,7 @@ import os
 
 from PIL import Image
 
-from constants import TOKEN, FACE_DIR
+from src.constants import TOKEN, FACE_DIR
 
 
 async def get_file_data(message, photo=True):

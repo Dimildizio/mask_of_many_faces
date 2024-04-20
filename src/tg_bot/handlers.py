@@ -4,8 +4,8 @@ from aiogram.types import Message
 from datetime import datetime
 from typing import Any
 
-from constants import SENT_TIME, DELAY_BETWEEN_IMAGES
-from tg_bot.img_downloader import handle_download
+from src.constants import SENT_TIME, DELAY_BETWEEN_IMAGES
+from src.tg_bot.img_downloader import handle_download
 
 
 async def prevent_multisending(message: Message) -> bool:
