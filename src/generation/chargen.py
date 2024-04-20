@@ -2,8 +2,8 @@
 
 from typing import Tuple, Dict
 
-from generation.gen_write import write_image
-from generation.gen_requests import requests_adapter
+from src.generation.gen_write import write_image
+from src.generation.gen_requests import requests_adapter
 
 
 def get_prompts(character: Dict) -> Tuple:
