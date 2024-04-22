@@ -86,6 +86,7 @@ async def fetch_user_details(user_id):
                   f"Hair: {user_details.hair}, Background: {user_details.background}")
             triplets = (user_details.current_face_image, user_details.current_target_image,
                         user_details.current_result_image)
+            print(user_id, classes, triplets)
             return user_details
         else:
             print("User details not found.")
@@ -97,7 +98,7 @@ async def update_attr(user_id, attribute_name, new_value):
             if hasattr(user, attribute_name):
                 setattr(user, attribute_name, new_value)
                 await session.commit()
-                return True
+                return user
             else:
                 print(f"Attribute '{attribute_name}' not found on User.")
                 return False
