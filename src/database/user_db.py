@@ -1,5 +1,5 @@
-from sqlalchemy import select, Column, Integer, String, Boolean
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy import select, Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -10,6 +10,37 @@ from src.constants import ASYNC_DB_URL
 Base = declarative_base()
 async_engine = create_async_engine(ASYNC_DB_URL, echo=True)
 async_session = sessionmaker(async_engine, expire_on_commit=False, class_=AsyncSession)
+
+
+
+
+class Character(Base):
+    __tablename__ = 'characters'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    race = Column(String(50), default='dwarf')
+    gender = Column(Boolean, default=False)
+    dnd_class = Column(String(50), default='fighter')
+    hair = Column(String(50), default='black')
+    beard = Column(Boolean, default=True)
+    background = Column(String(255), default='forest')
+
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", back_populates="character", uselist=False)
+
+
+class Triplet(Base):
+    __tablename__ = 'triplets'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    target_image = Column(String(255), nullable=True, default=None)
+    face_image = Column(String(255), nullable=True, default=None)
+    result_image = Column(String(255), nullable=True, default=None)
+
+    character_id = Column(Integer, ForeignKey('characters.id'))
+    character = relationship("Character")
+    user = relationship("User", back_populates="triplets")
 
 
 class User(Base):
@@ -24,12 +55,10 @@ class User(Base):
     is_premium = Column(Boolean, default=False)
     requests_left = Column(Integer, default=10)
 
-    race = Column(String(50), default='human')
-    gender = Column(Boolean, default=False)
-    dnd_class = Column(String(50), default='fighter')
-    hair = Column(String(50), default='black')
-    beard = Column(Boolean, default=False)
-    background = Column(String(255), default='forest')
+    character_id = Column(Integer, ForeignKey('characters.id'))
+    character = relationship("Character", back_populates="user", uselist=False)
+
+    triplets = relationship("Triplet", back_populates="user", order_by=Triplet.id)
 
 
 async def add_user(user_id, user_name, user_surname, user_nickname=None):
@@ -46,9 +75,10 @@ async def add_user(user_id, user_name, user_surname, user_nickname=None):
                 user_name=user_name,
                 user_surname=user_surname,
                 user_nickname=user_nickname)
+            existing_user.character = Character()
         session.add(existing_user)
         await session.commit()
-        return existing_user.user_id
+        return existing_user
 
 
 async def find_user_id(session, user_id):
