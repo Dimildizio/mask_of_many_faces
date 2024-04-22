@@ -27,7 +27,6 @@ async def download_image(response, input_path: str) -> str:
 
 
 async def handle_download(message, photo=True):
-    print('yes')
     file_url, input_path = await get_file_data(message, photo)
     async with aiohttp.ClientSession() as session:
         async with session.get(file_url) as response:
