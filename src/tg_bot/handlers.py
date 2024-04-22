@@ -5,7 +5,6 @@ from datetime import datetime
 from typing import Any
 
 from src.constants import SENT_TIME, DELAY_BETWEEN_IMAGES
-from src.tg_bot.img_downloader import handle_download
 from src.tg_bot.process_requests import user2db, process_user_face
 
 async def prevent_multisending(message: Message) -> bool:

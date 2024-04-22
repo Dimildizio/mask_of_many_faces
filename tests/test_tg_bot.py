@@ -1,7 +1,8 @@
 import unittest
-from unittest.mock import patch, AsyncMock
-from aiogram.types import Message, User, Chat
-
+from unittest.mock import patch, AsyncMock, MagicMock
+from aiogram.types import Message, User, Chat, PhotoSize
+from src.tg_bot.process_requests import user2db, process_user_face, change_value
+from tests.constants_for_test import TEST_FAKE_FILEPATH
 
 class TestImgDownload(unittest.TestCase):
     @patch('src.tg_bot.img_download.aiohttp.ClientSession')
@@ -14,7 +15,7 @@ class TestImgDownload(unittest.TestCase):
 
         from src.tg_bot.img_downloader import handle_download
         message = Message(message_id=123, date=0, chat=Chat(id=0, type='private'),
-                          photo=[type('obj', (object,), {'file_id': 'file123'})],
+                          photo=[PhotoSize(file_id='file123', width=100, height=100, file_unique_id='unique_id_value')],
                           from_user=User(id=1, is_bot=False, first_name='test'))
 
         result = await handle_download(message)
@@ -48,16 +49,16 @@ class TestBotCommands(unittest.TestCase):
 
 
 class TestHandlers(unittest.TestCase):
-    @patch('src.tg_bot.handlers.handle_download')
-    async def test_handle_image(self, mock_handle_download):
-        mock_handle_download.return_value = '/fake/path/to/image.png'
+    @patch('src.tg_bot.handlers.handle_image')
+    async def test_handle_image(self, mock_handle_image):
+        mock_handle_image.return_value = TEST_FAKE_FILEPATH
 
         from src.tg_bot.handlers import handle_image
         message = Message(message_id=123, date=0, chat=Chat(id=0, type='private'),
                           from_user=User(id=1, is_bot=False, first_name='test'))
 
         result = await handle_image(message, photo=True)
-        self.assertEqual(result, '/fake/path/to/image.png')
+        self.assertEqual(result, TEST_FAKE_FILEPATH)
 
     @patch('src.tg_bot.handlers.prevent_multisending')
     @patch('src.tg_bot.handlers.handle_start')
@@ -71,6 +72,35 @@ class TestHandlers(unittest.TestCase):
 
         await handle_start(message)
         mock_handle_start.assert_not_called()
+
+
+class TestProcessRequests(unittest.IsolatedAsyncioTestCase):
+    async def test_user2db(self):
+        # Mocking the message object with a non-None photo attribute
+        message = Message(
+            message_id=123,
+            date=0,
+            chat=Chat(id=0, type='private'),
+            hoto=[PhotoSize(file_id='file123', width=100, height=100, file_unique_id='unique_id_value')],
+            # Ensure photo attribute is not None
+            from_user=User(id=123, first_name='John', last_name='Doe', username='johndoe', is_bot=False)
+        )
+        # Mocking the add_user function
+        with patch('src.tg_bot.process_requests.add_user') as mock_add_user:
+            mock_add_user.return_value = AsyncMock()  # Mocking the return value of add_user function
+            await user2db(message)
+            mock_add_user.assert_called_once_with(123, 'John', 'Doe', 'johndoe')
+
+    async def test_change_value(self):
+        # Mocking the callback query object with required fields
+        query_mock = MagicMock()
+        query_mock.from_user = MagicMock(id=123, is_bot=False, first_name='John')
+        query_mock.chat_instance = 'chat_instance_value'
+
+        # Mocking the update_attr function
+        with patch('src.tg_bot.process_requests.update_attr') as mock_update_attr:
+            mock_update_attr.return_value = AsyncMock()
+            await change_value(query_mock)
 
 
 if __name__ == '__main__':
