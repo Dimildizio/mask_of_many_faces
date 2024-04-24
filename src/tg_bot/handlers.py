@@ -6,6 +6,8 @@ from typing import Any
 
 from src.constants import SENT_TIME, DELAY_BETWEEN_IMAGES
 from src.tg_bot.process_requests import user2db, process_user_face
+from src.database.user_db import create_tables
+
 
 async def prevent_multisending(message: Message) -> bool:
     """
@@ -28,6 +30,7 @@ async def handle_start(message: Message) -> None:
     :param message: The message with user data.
     :return: None
     """
+    await create_tables()
     await user2db(message)
     await message.answer('send a photo, choose settings and type /generate')
 
@@ -60,7 +63,7 @@ async def handle_image(message, photo: bool) -> None:
     :param photo: Image from gallery or as document
     :return: None
     """
-    await process_user_face(message, photo)
+    user = await process_user_face(message, photo)
 
 
 async def handle_unsupported_content(message: Message) -> None:
