@@ -23,7 +23,7 @@ def get_prompts(character: Dict) -> Tuple:
     return prompt, negative_prompt
 
 
-def generate_image(character: Dict) -> str:
+async def generate_image(character: Dict) -> str:
     """
     Creates prompts, creates requests, sends requests and saves to file
     :param character: dict with prompt details users choose

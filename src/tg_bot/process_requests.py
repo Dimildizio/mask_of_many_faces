@@ -15,9 +15,18 @@ async def process_user_face(message, photo):
     user = await user2db(message)
     face_img_path = await handle_download(message, photo)
     db_user = await update_attr(user.user_id, 'current_face_image', face_img_path)
-    target_face = await process_user_generation(db_user.character)
+    character = await character2dict(db_user)
+    target_face = await process_user_generation(character)
     face_path = await send_image_to_swapper(face_img_path, target_face)
     return face_path
+
+
+async def character2dict(user):
+    if user:
+        idict =  {key: value for key, value in user.__dict__.items() if not key.startswith('_sa_')}
+        print(idict)
+        return idict
+    return None
 
 
 async def process_user_generation(character):

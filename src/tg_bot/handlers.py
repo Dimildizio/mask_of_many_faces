@@ -1,6 +1,6 @@
 from aiogram import F
 from aiogram.filters.command import Command
-from aiogram.types import Message
+from aiogram.types import Message, FSInputFile
 from datetime import datetime
 from typing import Any
 
@@ -63,8 +63,9 @@ async def handle_image(message, photo: bool) -> None:
     :param photo: Image from gallery or as document
     :return: None
     """
-    user = await process_user_face(message, photo)
-
+    file_address = await process_user_face(message, photo)
+    print(file_address)
+    await message.answer_photo(FSInputFile(file_address[0]))
 
 async def handle_unsupported_content(message: Message) -> None:
     """
