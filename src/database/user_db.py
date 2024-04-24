@@ -18,8 +18,8 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, unique=True)
-    user_name = Column(String(255), nullable=False)
-    user_surname = Column(String(255), nullable=False)
+    user_name = Column(String(255), nullable=True)
+    user_surname = Column(String(255), nullable=True)
     user_nickname = Column(String(255), nullable=True)
 
     is_premium = Column(Boolean, default=False)
@@ -36,8 +36,14 @@ class User(Base):
     current_target_image = Column(String(255), nullable=True)
     current_result_image = Column(String(255), nullable=True)
 
+async def fetch_all_users():
+    """Retrieve all users from the database."""
+    async with async_session() as session:
+        result = await session.execute(select(User))
+        users = result.scalars().all()
+        return users
 
-async def add_user(user_id, user_name, user_surname, user_nickname=None):
+async def add_user(user_id, user_name, user_surname=False, user_nickname=False):
     async with async_session() as session:
 
         existing_user = await find_user_id(session, user_id)
@@ -78,7 +84,7 @@ async def fetch_user_details(user_id):
     async with async_session() as session:
         stmt = select(
             User.dnd_class, User.race, User.beard, User.hair, User.background,
-        User.current_face_image, User.current_target_image, User.current_result_image).where(User.id == user_id)
+        User.current_face_image, User.current_target_image, User.current_result_image).where(User.user_id == user_id)
         result = await session.execute(stmt)
         user_details = result.first()
         if user_details:
@@ -93,11 +99,14 @@ async def fetch_user_details(user_id):
 
 async def update_attr(user_id, attribute_name, new_value):
     async with async_session() as session:
-        user = await session.get(User, user_id)
+        user = await find_user_id(session, user_id)
+        print(user)
+        await fetch_user_details(user_id)
         if user:
             if hasattr(user, attribute_name):
                 setattr(user, attribute_name, new_value)
                 await session.commit()
+
                 return user
             else:
                 print(f"Attribute '{attribute_name}' not found on User.")

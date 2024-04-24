@@ -1,5 +1,5 @@
 import aiohttp
-
+import json
 from constants import FASTAPI_BASE_URL
 
 
@@ -9,7 +9,7 @@ async def send_image_to_swapper(source_path, target_path):
         try:
             async with session.post(f"{FASTAPI_BASE_URL}/swapper", data=data) as response:
                 if response.status == 200:
-                    return await response.text()
+                    return json.loads(await response.text())
                 else:
                     return None
         except Exception as e:
