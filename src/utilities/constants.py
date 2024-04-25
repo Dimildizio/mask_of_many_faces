@@ -1,4 +1,4 @@
-from utils import get_yaml
+from src.utilities.utils import get_yaml
 
 
 CONFIG = get_yaml()

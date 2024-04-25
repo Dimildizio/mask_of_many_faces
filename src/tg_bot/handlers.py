@@ -4,7 +4,7 @@ from aiogram.types import Message, FSInputFile
 from datetime import datetime
 from typing import Any
 
-from src.constants import SENT_TIME, DELAY_BETWEEN_IMAGES
+from src.utilities.constants import SENT_TIME, DELAY_BETWEEN_IMAGES
 from src.tg_bot.process_requests import user2db, process_user_face
 from src.database.user_db import create_tables
 

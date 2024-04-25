@@ -1,7 +1,7 @@
 import unittest
 import os
 
-from src.constants import FACE_DIR
+from src.utilities.constants import FACE_DIR
 from src.generation.chargen import generate_image
 from src.swapper.swap_requests import send_image_to_swapper
 

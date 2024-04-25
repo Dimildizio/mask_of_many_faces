@@ -3,8 +3,9 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from typing import Any
 
-from constants import TOKEN
-from tg_bot.handlers import setup_handlers
+from src.utilities.constants import TOKEN
+from src.tg_bot.handlers import setup_handlers
+from src.database.user_db import create_tables
 
 
 
@@ -16,6 +17,7 @@ async def main(disp: Any, io_bot: Any) -> None:
     :param io_bot: The IO-bound operations bot.
     :return: None
     """
+    #await create_tables()
     setup_handlers(disp, TOKEN)
     await disp.start_polling(io_bot)
 
