@@ -12,14 +12,16 @@ def get_prompts(character: Dict) -> Tuple:
     :param character: a dict with prompt details wht to generate
     :return: tuple of prompt and negative prompt
     """
-    beard = f" and {character['hair']} {character['beard']} beard" if character['beard'] else ''
+    beard = f" and {character['hair']} {character['beard']} beard " if character['beard']==True else ''
     hair = f" with {character['hair']} hair" if character['hair'] else ''
+    gender = 'male' if character['gender']== True else 'female'
 
-    prompt = f"One photorealistic D&D game character middle-aged {character['race']} {character['dnd_class']}" \
-             f"{hair}{beard}, {character['background']} background, realistic face." \
-             f"One person on image, Fantasy art, full body, facial detail, extremely detailed, photorealistic style"
+    prompt = f"One photorealistic D&D game character middle-aged {character['race']} {gender} " \
+             f"{character['dnd_class']} {hair}{beard}, {character['background']} background, realistic face. " \
+             f"One person on image, Fantasy art, full body, facial detail, extremely detailed, photorealistic style "
     negative_prompt = f"mutated fingers, fused hands, malformed hands grip, malformed limbs, missing arms, " \
                       f"missing legs, extra arms, extra legs{', tusks, teeth'}"
+    print(prompt)
     return prompt, negative_prompt
 
 
