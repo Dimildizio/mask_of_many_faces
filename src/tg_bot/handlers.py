@@ -6,6 +6,7 @@ from typing import Any
 
 from src.utilities.constants import SENT_TIME, DELAY_BETWEEN_IMAGES
 from src.tg_bot.process_requests import user2db, process_user_face
+from src.tg_bot.callbacks import button_callback_handler, main_menu
 from src.database.user_db import create_tables
 
 
@@ -67,6 +68,7 @@ async def handle_image(message, photo: bool) -> None:
     print(file_address)
     await message.answer_photo(FSInputFile(file_address[0]))
 
+
 async def handle_unsupported_content(message: Message) -> None:
     """
     Handles all other unsupported content by providing a response to the user.
@@ -78,20 +80,18 @@ async def handle_unsupported_content(message: Message) -> None:
     await message.answer('No way')
 
 
-def setup_handlers(dp: Any, bot_token: str) -> None:
+def setup_handlers(dp: Any) -> None:
     """
     Sets up handlers for different commands, messages, and callbacks.
 
     :param dp: The bot dispatcher object.
-    :param bot_token: The Telegram bot token.
     :return: None
     """
     dp.message(Command('start'))(handle_start)
     dp.message(Command('help'))(handle_help)
     dp.message(Command('contacts'))(handle_contacts)
+    dp.message(Command('menu'))(main_menu)
 
-    #  dp.message(Command('menu'))(handle_category_command)
-    #  dp.callback_query()(button_callback_handler)
     async def generic_handler(func, message: Message, photo: bool) -> None:
         if await prevent_multisending(message):
             await func(message, photo)
@@ -111,3 +111,5 @@ def setup_handlers(dp: Any, bot_token: str) -> None:
 
     dp.message(F.sticker | F.audio | F.video | F.audio | F.poll | F.contact | F.video_note)(
                handle_unsupported_content)
+
+    dp.callback_query()(button_callback_handler)
