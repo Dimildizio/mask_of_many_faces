@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Any
 
 from src.utilities.constants import SENT_TIME, DELAY_BETWEEN_IMAGES
-from src.tg_bot.process_requests import user2db, process_user_face
+from src.tg_bot.process_requests import user2db, process_user_face, show_character_details, generate_character
 from src.tg_bot.callbacks import button_callback_handler, main_menu
 from src.database.user_db import create_tables
 
@@ -33,7 +33,7 @@ async def handle_start(message: Message) -> None:
     """
     await create_tables()
     await user2db(message)
-    await message.answer('send a photo, choose settings and type /generate')
+    await message.answer('choose settings and type /generate or send a photo to create a character with your face')
 
 
 async def handle_help(message: Message) -> None:
@@ -54,6 +54,11 @@ async def handle_contacts(message) -> None:
     :return: None
     """
     await message.answer('Ask here @Adjuface_bot and @oaiohmy')
+
+
+async def handle_generate(message):
+    char_image = await generate_character(message)
+    await message.answer_photo(FSInputFile(char_image))
 
 
 async def handle_image(message, photo: bool) -> None:
@@ -91,6 +96,8 @@ def setup_handlers(dp: Any) -> None:
     dp.message(Command('help'))(handle_help)
     dp.message(Command('contacts'))(handle_contacts)
     dp.message(Command('menu'))(main_menu)
+    dp.message(Command('character'))(show_character_details)
+    dp.message(Command('generate'))(handle_generate)
 
     async def generic_handler(func, message: Message, photo: bool) -> None:
         if await prevent_multisending(message):
