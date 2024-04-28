@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.utilities.constants import ASYNC_DB_URL
 
-#ASYNC_DB_URL = 'sqlite+aiosqlite:///dnd_user_database.db'
+# ASYNC_DB_URL = 'sqlite+aiosqlite:///dnd_user_database.db'
 
 Base = declarative_base()
 async_engine = create_async_engine(ASYNC_DB_URL, echo=True)
@@ -35,12 +35,14 @@ class User(Base):
     current_target_image = Column(String(255), nullable=True)
     current_result_image = Column(String(255), nullable=True)
 
+
 async def fetch_all_users():
     """Retrieve all users from the database."""
     async with async_session() as session:
         result = await session.execute(select(User))
         users = result.scalars().all()
         return users
+
 
 async def add_user(user_id, user_name, user_surname=False, user_nickname=False):
     async with async_session() as session:
@@ -83,7 +85,8 @@ async def fetch_user_details(user_id):
     async with async_session() as session:
         stmt = select(
             User.dnd_class, User.race, User.beard, User.gender, User.hair, User.background,
-        User.current_face_image, User.current_target_image, User.current_result_image).where(User.user_id == user_id)
+            User.current_face_image, User.current_target_image, User.current_result_image).where(
+                User.user_id == user_id)
         result = await session.execute(stmt)
         user_details = result.first()
         if user_details:
@@ -95,6 +98,7 @@ async def fetch_user_details(user_id):
             return user_details
         else:
             print("User details not found.")
+
 
 async def update_attr(user_id, attribute_name, new_value):
     async with async_session() as session:

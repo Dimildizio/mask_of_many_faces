@@ -14,7 +14,7 @@ async def user2db(message):
 
 async def character2dict(user):
     if user:
-        idict =  {key: value for key, value in user.__dict__.items() if not key.startswith('_sa_')}
+        idict = {key: value for key, value in user.__dict__.items() if not key.startswith('_sa_')}
         print(idict)
         return idict
     return None
@@ -41,6 +41,7 @@ async def generate_character(message):
     character = await character2dict(db_user)
     target_face = await process_user_generation(character)
     return target_face
+
 
 async def process_subcats(query):
     _, category, subcategory = query.data.split('_')
@@ -73,4 +74,3 @@ async def submenu_chosen(query):
 async def show_character_details(message):
     text = await userdata_output(message.from_user.id)
     await message.answer(f'Current character:\n{text}')
-

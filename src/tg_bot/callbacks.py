@@ -34,7 +34,6 @@ async def main_menu(message: Message) -> None:
     await message.answer('Choose your Character', reply_markup=keyboard)
 
 
-
 async def go_to_main(query):
     keyboard = await create_category_buttons()
     await query.message.edit_text("Choose you character", reply_markup=keyboard)
@@ -79,7 +78,7 @@ async def button_callback_handler(query: CallbackQuery) -> None:
     :param query: CallbackQuery.
     :return: None
     """
-    await query.answer() # to stop the button from flashing
+    await query.answer()  # to stop the button from flashing
     match query.data:
         case data if data.startswith('menu_'):  # Check if the callback data starts with 'c_'
             category = data.split('_')[1]
@@ -93,5 +92,3 @@ async def button_callback_handler(query: CallbackQuery) -> None:
             await go_to_main(query)
         case _:
             print('Weird case')
-
-

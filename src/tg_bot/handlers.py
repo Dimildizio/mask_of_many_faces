@@ -60,6 +60,7 @@ async def handle_generate(message):
     char_image = await generate_character(message)
     await message.answer_photo(FSInputFile(char_image))
 
+
 async def handle_image(message, photo: bool) -> None:
     """
     Sends the contact information to user.
@@ -97,6 +98,7 @@ def setup_handlers(dp: Any) -> None:
     dp.message(Command('menu'))(main_menu)
     dp.message(Command('character'))(show_character_details)
     dp.message(Command('generate'))(handle_generate)
+
     async def generic_handler(func, message: Message, photo: bool) -> None:
         if await prevent_multisending(message):
             await func(message, photo)
