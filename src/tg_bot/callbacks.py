@@ -1,5 +1,5 @@
-
 from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
+from src.tg_bot.process_requests import submenu_chosen
 
 
 async def create_category_buttons() -> InlineKeyboardMarkup:
@@ -34,27 +34,10 @@ async def main_menu(message: Message) -> None:
     await message.answer('Choose your Character', reply_markup=keyboard)
 
 
-async def button_callback_handler(query: CallbackQuery) -> None:
-    """
-    Handles button callbacks from inline keyboards. Categories, subcategories and back button.
 
-    :param query: CallbackQuery.
-    :return: None
-    """
-    match query.data:
-        case data if data.startswith('menu_'):  # Check if the callback data starts with 'c_'
-            category = data.split('_')[1]
-            keyboard = await create_subcategory_buttons(category)
-            await query.message.edit_text(f"Choose your {category.title()}", reply_markup=keyboard)
-
-        case data if data.startswith('submenu_'):
-            _, category, subcategory = data.split('_')
-            print('Selected:', category, subcategory)
-        case'back':  # for subcategories to return to main menu
-            keyboard = await create_category_buttons()
-            await query.message.edit_text("Choose you character", reply_markup=keyboard)
-        case _:
-            print('Weird case')
+async def go_to_main(query):
+    keyboard = await create_category_buttons()
+    await query.message.edit_text("Choose you character", reply_markup=keyboard)
 
 
 async def create_subcategory_buttons(category: str) -> InlineKeyboardMarkup:
@@ -69,11 +52,10 @@ async def create_subcategory_buttons(category: str) -> InlineKeyboardMarkup:
                  'Gnome'],
         'class': ['Fighter', 'Wizard', 'Barbarian', 'Thief', 'Cleric', 'Artificer', 'Sorcerer', 'Druid', 'Warlock',
                   'Bard', 'Monk', 'Ranger', 'Paladin'],
-        'hair': ['Black', 'Red', 'White', 'None'],
+        'hair': ['Black', 'Red', 'Blonde', 'No'],
         'beard': ['Yes', 'No'],
-        'gender': ['Unknown', 'Known'],
-        'background': ['Tavern', 'Forest', 'Ship', 'Dungeon', 'River Bank', 'City']
-    }
+        'gender': ['Male', 'Female'],
+        'background': ['Tavern', 'Forest', 'Ship', 'Dungeon', 'River Bank', 'City']}
 
     row, keyboard_buttons = [], []
     for subcategory in subcategories.get(category, []):
@@ -85,7 +67,31 @@ async def create_subcategory_buttons(category: str) -> InlineKeyboardMarkup:
             row = []
     if row:
         keyboard_buttons.append(row)
-
     # Adding a back button to go to the main menu
     keyboard_buttons.append([InlineKeyboardButton(text="Back", callback_data="back")])
     return InlineKeyboardMarkup(inline_keyboard=keyboard_buttons)
+
+
+async def button_callback_handler(query: CallbackQuery) -> None:
+    """
+    Handles button callbacks from inline keyboards. Categories, subcategories and back button.
+
+    :param query: CallbackQuery.
+    :return: None
+    """
+    await query.answer() # to stop the button from flashing
+    match query.data:
+        case data if data.startswith('menu_'):  # Check if the callback data starts with 'c_'
+            category = data.split('_')[1]
+            keyboard = await create_subcategory_buttons(category)
+            await query.message.edit_text(f"Choose your {category.title()}", reply_markup=keyboard)
+
+        case data if data.startswith('submenu_'):
+            await submenu_chosen(query)
+            await go_to_main(query)
+        case'back':  # for subcategories to return to main menu
+            await go_to_main(query)
+        case _:
+            print('Weird case')
+
+
