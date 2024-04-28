@@ -25,7 +25,7 @@ class User(Base):
     requests_left = Column(Integer, default=10)
 
     race = Column(String(50), default='dwarf')
-    gender = Column(Boolean, default=False)
+    gender = Column(Boolean, default=True)
     dnd_class = Column(String(50), default='fighter')
     hair = Column(String(50), default='black')
     beard = Column(Boolean, default=False)
@@ -82,13 +82,13 @@ async def fetch_user_details(user_id):
     """Fetch specific attributes for a user by user_id."""
     async with async_session() as session:
         stmt = select(
-            User.dnd_class, User.race, User.beard, User.hair, User.background,
+            User.dnd_class, User.race, User.beard, User.gender, User.hair, User.background,
         User.current_face_image, User.current_target_image, User.current_result_image).where(User.user_id == user_id)
         result = await session.execute(stmt)
         user_details = result.first()
         if user_details:
-            classes = (f"Class: {user_details.dnd_class}, Race: {user_details.race}, Beard: {user_details.beard}, "
-                  f"Hair: {user_details.hair}, Background: {user_details.background}")
+            classes = (f"Class: {user_details.dnd_class}, Race: {user_details.race}, Gender: {user_details.gender},"
+                       f"Beard: {user_details.beard}, Hair: {user_details.hair}, Background: {user_details.background}")
             triplets = (user_details.current_face_image, user_details.current_target_image,
                         user_details.current_result_image)
             print(user_id, classes, triplets)
