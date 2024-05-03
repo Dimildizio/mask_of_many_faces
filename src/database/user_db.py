@@ -3,7 +3,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.utilities.constants import ASYNC_DB_URL
+from utilities.constants import ASYNC_DB_URL
 
 # ASYNC_DB_URL = 'sqlite+aiosqlite:///dnd_user_database.db'
 

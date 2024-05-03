@@ -1,6 +1,6 @@
 import aiohttp
 import json
-from src.utilities.constants import FASTAPI_BASE_URL
+from utilities.constants import FASTAPI_BASE_URL
 
 
 async def send_image_to_swapper(source_path, target_path):

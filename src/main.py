@@ -3,8 +3,8 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from typing import Any
 
-from src.utilities.constants import TOKEN
-from src.tg_bot.handlers import setup_handlers
+from utilities.constants import TOKEN
+from tg_bot.handlers import setup_handlers
 
 
 async def main(disp: Any, io_bot: Any) -> None:

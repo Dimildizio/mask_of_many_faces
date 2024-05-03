@@ -1,5 +1,5 @@
 from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
-from src.tg_bot.process_requests import submenu_chosen
+from tg_bot.process_requests import submenu_chosen
 
 
 async def create_category_buttons() -> InlineKeyboardMarkup:

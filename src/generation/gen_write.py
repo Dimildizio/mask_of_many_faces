@@ -6,7 +6,7 @@ import random
 
 from typing import Dict
 
-from src.utilities.constants import GEN_FOLDER
+from utilities.constants import GEN_FOLDER
 
 
 def gen_filename(filetype: str = 'gen', ext: str = 'png') -> str:

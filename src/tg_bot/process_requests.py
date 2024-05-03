@@ -1,7 +1,7 @@
-from src.database.user_db import add_user, update_attr, fetch_user_details
-from src.tg_bot.img_downloader import handle_download
-from src.swapper.swap_requests import send_image_to_swapper
-from src.generation.chargen import generate_image
+from database.user_db import add_user, update_attr, fetch_user_details
+from tg_bot.img_downloader import handle_download
+from swapper.swap_requests import send_image_to_swapper
+from generation.chargen import generate_image
 
 
 async def user2db(message):

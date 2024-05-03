@@ -5,7 +5,7 @@ import requests
 
 from typing import Tuple, Dict, Any
 
-from src.utilities.constants import API, URL, GEN_MODEL, WIDTH, HEIGHT, STEP
+from utilities.constants import API, URL, GEN_MODEL, WIDTH, HEIGHT, STEP
 
 
 def create_request(prompt, negative_prompt) -> Tuple:

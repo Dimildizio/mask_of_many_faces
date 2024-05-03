@@ -4,10 +4,10 @@ from aiogram.types import Message, FSInputFile
 from datetime import datetime
 from typing import Any
 
-from src.utilities.constants import SENT_TIME, DELAY_BETWEEN_IMAGES
-from src.tg_bot.process_requests import user2db, process_user_face, show_character_details, generate_character
-from src.tg_bot.callbacks import button_callback_handler, main_menu
-from src.database.user_db import create_tables
+from utilities.constants import SENT_TIME, DELAY_BETWEEN_IMAGES
+from tg_bot.process_requests import user2db, process_user_face, show_character_details, generate_character
+from tg_bot.callbacks import button_callback_handler, main_menu
+from database.user_db import create_tables
 
 
 async def prevent_multisending(message: Message) -> bool:
