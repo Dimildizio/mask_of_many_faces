@@ -1,4 +1,5 @@
 import asyncio
+import sys
 
 from aiogram import Bot, Dispatcher
 from typing import Any
@@ -21,6 +22,10 @@ async def main(disp: Any, io_bot: Any) -> None:
 
 
 if __name__ == '__main__':
-    bot = Bot(token=TOKEN)
-    dp = Dispatcher()
-    asyncio.run(main(dp, bot))
+    try:
+        bot = Bot(token=TOKEN)
+        dp = Dispatcher()
+        asyncio.run(main(dp, bot))
+    except KeyboardInterrupt:
+        print("Shut down")
+        sys.exit(0)
