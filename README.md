@@ -102,12 +102,17 @@ This project is a Telegram bot that allows users to create custom fantasy Dungeo
      - Hair: blonde
      - Beard: yes
      - Background: ship
-       
-   ![Example1](docs/img_examples/one example.png)
 
+
+   ![docs/img_examples/one example.png](https://github.com/Dimildizio/mask_of_many_faces/blob/main/docs/img_examples/one_example.png?raw=true)
+
+       
 2. **More examples:**
    
-   ![Example2](docs/img_examples/one example.png)
+       prompt -> generated image -> source face -> result
+   
+   ![docs/img_examples/one example.png](https://github.com/Dimildizio/mask_of_many_faces/blob/main/docs/img_examples/many_example.png?raw=true)
+
 
 ## Project Structure
 - `src`: folder for project python files
